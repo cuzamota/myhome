@@ -25,11 +25,19 @@
             <input type="hidden" th:field="*{id}">
             <div class="form-group">
                 <label for="title" class="form-label">제목</label>
-                <input type="text" class="form-control" id="title" th:field="*{title}" placeholder="제목을 입력 하세요.">
+                <input type="text" class="form-control " 
+                    th:classappend="${#fields.hasErrors('title')} ? 'is-invalid'" id="title" th:field="*{title}" placeholder="제목을 입력 하세요.">
+                <div id="validationServer03Feedback" class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
+                    Title Errors.
+                </div>
             </div>
             <div class="form-group">
                 <label for="content" class="form-label">글 내용</label>
-                <textarea class="form-control" id="content" rows="3" th:field="*{content}"></textarea>
+                <textarea class="form-control" 
+                 th:classappend="${#fields.hasErrors('title')} ? 'is-invalid'" id="content" rows="3" th:field="*{content}"></textarea>
+                <div id="validationServer03Feedback" class="invalid-feedback" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">
+                    Title Errors.
+                </div>
             </div>
             <div class="text-right">
                 <a type="button" class="btn btn-primary" th:href="@{/board/list}">취소</a>
