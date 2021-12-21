@@ -1,5 +1,4 @@
 package com.godcoder.myhome.controller;
-
 import com.godcoder.myhome.model.Board;
 import com.godcoder.myhome.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +17,11 @@ class BoardApiController {
     @GetMapping("/boards")
     List<Board> all(@RequestParam(required = false, defaultValue = "") String title,
                     @RequestParam(required = false, defaultValue = "") String content) {
-        if(StringUtils.isEmpty(title) && StringUtils.isEmpty(content)){
+        if(StringUtils.isEmpty(title) && StringUtils.isEmpty(content)) {
             return repository.findAll();
-        }else{
+        } else {
             return repository.findByTitleOrContent(title, content);
         }
-
-
     }
 
     @PostMapping("/boards")
@@ -32,9 +29,10 @@ class BoardApiController {
         return repository.save(newBoard);
     }
 
+    // Single item
+
     @GetMapping("/boards/{id}")
     Board one(@PathVariable Long id) {
-
         return repository.findById(id).orElse(null);
     }
 

@@ -29,9 +29,8 @@ public class BoardController {
     @GetMapping("/list")
     public String list(Model model, @PageableDefault(size = 2) Pageable pageable,
                        @RequestParam(required = false, defaultValue = "") String searchText) {
-        //Page<Board> boards = boardRepository.findAll(pageable);
+//        Page<Board> boards = boardRepository.findAll(pageable);
         Page<Board> boards = boardRepository.findByTitleContainingOrContentContaining(searchText, searchText, pageable);
-        //boards.getTotalElements();
         int startPage = Math.max(1, boards.getPageable().getPageNumber() - 4);
         int endPage = Math.min(boards.getTotalPages(), boards.getPageable().getPageNumber() + 4);
         model.addAttribute("startPage", startPage);
@@ -42,26 +41,23 @@ public class BoardController {
 
     @GetMapping("/form")
     public String form(Model model, @RequestParam(required = false) Long id) {
-        if(id == null){
+        if(id == null) {
             model.addAttribute("board", new Board());
-        }else{
+        } else {
             Board board = boardRepository.findById(id).orElse(null);
             model.addAttribute("board", board);
         }
-
-        return "/board/form";
+        return "board/form";
     }
 
-    @PostMapping("form")
-    public String postBoard(@Valid Board board, BindingResult bindingResult) {
+    @PostMapping("/form")
+    public String greetingSubmit(@Valid Board board, BindingResult bindingResult) {
         boardValidator.validate(board, bindingResult);
-        if(bindingResult.hasErrors()){
-            return "/board/form";
+        if (bindingResult.hasErrors()) {
+            return "board/form";
         }
-
         boardRepository.save(board);
         return "redirect:/board/list";
     }
-
 
 }
