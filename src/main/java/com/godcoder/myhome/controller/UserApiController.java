@@ -18,11 +18,23 @@ class UserApiController {
     private UserRepository repository;
 
     @GetMapping("/users")
-    List<User> all() {
-        List<User> users = repository.findAll();
-        log.debug("getBoards().size() 호출 전");
-        log.debug("getBoards().size() : {}", users.get(0).getBoards().size());
-        log.debug("getBoards().size() 호출 후");
+    List<User> all(@RequestParam(required = false) String method, @RequestParam(required = false) String text) {
+        List<User> users = null;
+//        log.debug("getBoards().size() 호출 전");
+//        log.debug("getBoards().size() : {}", users.get(0).getBoards().size());
+//        log.debug("getBoards().size() 호출 후");
+
+        if ("query".equals(method)){
+            users = repository.findByUsernameQuery(text);
+        } else if ("nativeQuery".equals(method)){
+            users = repository.findByUsernameNativeQuery(text);
+        } else if ("querydsl".equals(method)){
+//            QUser
+//            Predicate predicate = user.username.contains
+//            repository.findAll(predicate);
+        } else {
+            users = repository.findAll();
+        }
         return users;
     }
 

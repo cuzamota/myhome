@@ -29,7 +29,7 @@ public class User {
     //Board와 양방향 맵핑
     //@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    //@JsonIgnore
+    @JsonIgnore
     private List<Board> boards = new ArrayList<>();
 
 
