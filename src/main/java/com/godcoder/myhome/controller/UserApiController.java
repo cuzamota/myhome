@@ -1,13 +1,13 @@
 package com.godcoder.myhome.controller;
 
 import com.godcoder.myhome.model.Board;
+import com.godcoder.myhome.model.QUser;
 import com.godcoder.myhome.model.User;
 import com.godcoder.myhome.repository.UserRepository;
+import com.querydsl.core.types.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -18,8 +18,8 @@ class UserApiController {
     private UserRepository repository;
 
     @GetMapping("/users")
-    List<User> all(@RequestParam(required = false) String method, @RequestParam(required = false) String text) {
-        List<User> users = null;
+    Iterable<User> all(@RequestParam(required = false) String method, @RequestParam(required = false) String text) {
+        Iterable<User> users = null;
 //        log.debug("getBoards().size() 호출 전");
 //        log.debug("getBoards().size() : {}", users.get(0).getBoards().size());
 //        log.debug("getBoards().size() 호출 후");
@@ -29,9 +29,20 @@ class UserApiController {
         } else if ("nativeQuery".equals(method)){
             users = repository.findByUsernameNativeQuery(text);
         } else if ("querydsl".equals(method)){
-//            QUser
-//            Predicate predicate = user.username.contains
-//            repository.findAll(predicate);
+            QUser user = QUser.user;
+
+//            BooleanExpression b = user.username.contains(text);
+//            if (true) {
+//                b = b.and(user.username.eq("HI"));
+//            }
+//            users = repository.findAll(b);
+
+            Predicate predicate = user.username.contains(text);
+            users = repository.findAll(predicate);
+        } else if ("querydslCustom".equals(method)){
+            users = repository.findByUsernameCustom(text);
+        } else if ("jdbc".equals(method)){
+            users = repository.findByUsernameJdbc(text);
         } else {
             users = repository.findAll();
         }
